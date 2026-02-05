@@ -73,7 +73,6 @@ class My_App(QtWidgets.QMainWindow):
 			keypoints1, descriptors1 = detector.detectAndCompute(cam_frame, None)
 			keypoints2, descriptors2 = detector.detectAndCompute(tem_frame, None)
 			#-- Step 2: Matching descriptor vectors with a FLANN based matcher
-			# Since SURF is a floating-point descriptor NORM_L2 is used [NOT SURF - TODO CHOOSE MEST MATCHER]
 			matcher = cv2.DescriptorMatcher_create(cv2.DescriptorMatcher_FLANNBASED)
 			knn_matches = matcher.knnMatch(descriptors1, descriptors2, 2)
 			#-- Filter matches using the Lowe's ratio test
@@ -85,9 +84,7 @@ class My_App(QtWidgets.QMainWindow):
 			#-- Draw matches
 			img_matches = np.empty((max(cam_frame.shape[0], tem_frame.shape[0]), cam_frame.shape[1]+tem_frame.shape[1], 3), dtype=np.uint8)
 			cv2.drawMatches(cam_frame, keypoints1, tem_frame, keypoints2, good_matches, img_matches, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-			#-- Show detected matches
-			# cv2.imshow('Good Matches', img_matches)
-			# cv2.waitKey()
+
 			pixmap = self.convert_cv_to_pixmap(img_matches)
 		else:
 			print("Template image not selected!")
